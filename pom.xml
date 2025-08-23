@@ -100,6 +100,23 @@
 			<artifactId>flyway-core</artifactId>
 		</dependency>
 
+		<!-- pom.xml -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>4.4.0</version> <!-- Or the latest stable version -->
+		</dependency>
+
+		<dependency>
+			<groupId>networkshared</groupId> <!-- mesmo groupId que usou -->
+			<artifactId>NetworkShared</artifactId> <!-- o artifactId que usou -->
+			<version>0.0.1-SNAPSHOT</version> <!-- versão que está no pom da lib -->
+		</dependency>
+
 	</dependencies>
 
 	<build>

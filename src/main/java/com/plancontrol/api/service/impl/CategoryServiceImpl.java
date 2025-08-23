@@ -1,5 +1,7 @@
 package com.plancontrol.api.service.impl;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.networkshared.api.dtos.UserDTO;
 import com.plancontrol.api.dto.CategoryDTO;
 import com.plancontrol.api.exception.NotFoundException;
 import com.plancontrol.api.exception.UnsupportedFileException;
@@ -11,6 +13,8 @@ import com.plancontrol.api.mapper.ICategoryMapper;
 import com.plancontrol.api.models.Category;
 import com.plancontrol.api.repository.ICategoryRepository;
 import com.plancontrol.api.service.ICategoryService;
+import com.plancontrol.api.service.ITokenService;
+import com.plancontrol.api.service.client.IUserClientService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,15 +36,30 @@ public class CategoryServiceImpl implements ICategoryService {
 	private final ICategoryMapper categoryMapper;
 	private final FileImportedFactory importer;
 	private final FileExporterFactory exporter;
+	private final IUserClientService userClientService;
+	private final ITokenService tokenService;
 
 	@Override
 	public Page<Category> getAll(Pageable page) {
 		return categoryRepository.findAll(page);
 	}
-
+	
 	@Override
-	public CategoryDTO insert(Category category) {
-		return categoryMapper.toDto(categoryRepository.save(category));
+	public CategoryDTO findByIdComplet(UUID uuidCategory) {
+		CategoryDTO categoryDTO = findByIdDTO(uuidCategory);
+		UserDTO userDTO = userClientService.findByUUID(categoryDTO.getUserUpdateId());
+		categoryDTO.setUserUpdated(userDTO);
+		return categoryDTO;
+	}
+	
+	@Override
+	public CategoryDTO insert(CategoryDTO categoryDTO) {
+		DecodedJWT tokenDecoded = tokenService.decodedToken();
+		UUID uuidUser = userClientService.findUUIDByNick(tokenDecoded.getSubject());
+		
+		categoryDTO.setUserUpdateId(uuidUser);
+		Category entity = categoryMapper.toEntity(categoryDTO);
+		return categoryMapper.toDto(categoryRepository.save(entity));
 	}
 
 	@Override
@@ -47,26 +67,26 @@ public class CategoryServiceImpl implements ICategoryService {
 		return categoryRepository.countBy();
 	}
 
-	private Category findById(Long id) {
-		return categoryRepository.findById(id).orElseThrow(NotFoundException::new);
+	private Category findById(UUID uuid) {
+		return categoryRepository.findById(uuid).orElseThrow(NotFoundException::new);
 	}
 
 	@Override
 	public CategoryDTO update(CategoryDTO categoryDTO) {
-		Category category = findById(categoryDTO.getId());
+		Category category = findById(categoryDTO.getUuid());
 		return categoryMapper.toDto(categoryRepository.save(montarCategory(categoryDTO, category)));
 	}
 
 	private Category montarCategory(CategoryDTO categoryDTO, Category category) {
-		category.setId(categoryDTO.getId());
+		category.setUuid(categoryDTO.getUuid());
 		category.setName(categoryDTO.getName());
 		category.setDescription(categoryDTO.getDescription());
 		return category;
 	}
 
 	@Override
-	public void delete(Long categoryId) {
-		Category categoryById = findById(categoryId);
+	public void delete(UUID uuid) {
+		Category categoryById = findById(uuid);
 		categoryRepository.delete(categoryById);
 	}
 
@@ -106,8 +126,8 @@ public class CategoryServiceImpl implements ICategoryService {
 	}
 
 	@Override
-	public CategoryDTO findByIdDTO(Long id) {
-		Category category = findById(id);
+	public CategoryDTO findByIdDTO(UUID uuid) {
+		Category category = findById(uuid);
 		return categoryMapper.toDto(category);
 	}
 

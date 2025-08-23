@@ -7,22 +7,22 @@ import lombok.Setter;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.plancontrol.api.models.base.IdBase;
+
 import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "categories", schema = "plan_control")
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Category {
+public class Category extends IdBase implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private String name;
 
@@ -33,4 +33,7 @@ public class Category {
     private LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = true, updatable = true)
     private LocalDateTime updatedAt;
+    
+    @Column(name = "user_update_id")
+    private UUID userUpdateId;
 }

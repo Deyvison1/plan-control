@@ -8,23 +8,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ICategoryService {
     Page<Category> getAll(Pageable pageable);
 
     List<CategoryDTO> getAll();
 
-    CategoryDTO insert(Category category);
+    CategoryDTO insert(CategoryDTO categoryDTO);
 
     CategoryDTO update(CategoryDTO categoryDTO);
 
-    void delete(Long categoryId);
+    void delete(UUID uuid);
 
-    CategoryDTO findByIdDTO(Long id);
+    CategoryDTO findByIdDTO(UUID uuid);
 
     Long contarTodos();
 
     List<CategoryDTO> massCreation(MultipartFile file);
 
     Resource exportPage(Pageable pageable, String acceptHeader);
+    
+    CategoryDTO findByIdComplet(UUID uuidCategory);
 }

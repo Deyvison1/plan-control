@@ -14,7 +14,7 @@ public interface IBaseMapper<E, D> {
 
 	E toEntity(D dto);
 
-	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "uuid", ignore = true)
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 	E toEntity(D dto, @MappingTarget E entity);
 

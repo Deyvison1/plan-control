@@ -1,6 +1,7 @@
 package com.plancontrol.api.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -48,10 +49,15 @@ public class CategoryController {
 	public List<CategoryDTO> getAll() {
 		return categoryService.getAll();
 	}
+	
+	@GetMapping("/{uuid}")
+	public ResponseEntity<CategoryDTO> findByIdComplet(@PathVariable UUID uuid) {
+		return ResponseEntity.ok(categoryService.findByIdComplet(uuid));
+	}
 
 	@PostMapping
-	public CategoryDTO insert(@RequestBody Category category) {
-		return categoryService.insert(category);
+	public CategoryDTO insert(@RequestBody CategoryDTO categoryDTO) {
+		return categoryService.insert(categoryDTO);
 	}
 
 	@PutMapping
@@ -59,9 +65,9 @@ public class CategoryController {
 		return categoryService.update(categoryDTO);
 	}
 
-	@DeleteMapping("/{categoryId}")
-	public void delete(@PathVariable Long categoryId) {
-		categoryService.delete(categoryId);
+	@DeleteMapping("/{uuid}")
+	public void delete(@PathVariable UUID uuid) {
+		categoryService.delete(uuid);
 	}
 
 	@GetMapping("/import")

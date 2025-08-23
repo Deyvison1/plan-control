@@ -1,6 +1,9 @@
 package com.plancontrol.api.dto;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
+
+import com.networkshared.api.dtos.UserDTO;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +13,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class CategoryDTO {
-	private Long id;
+	private UUID uuid;
 
 	private String name;
 
@@ -19,4 +22,10 @@ public class CategoryDTO {
 	private LocalDateTime createdAt;
 
 	private LocalDateTime updatedAt;
+	
+	private UserDTO userCreated;
+	
+	private UserDTO userUpdated;
+	
+	private UUID userUpdateId;
 }

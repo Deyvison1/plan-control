@@ -1,6 +1,7 @@
 package com.plancontrol.api.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,8 +56,8 @@ public class ProductController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		productService.deleteProduct(id);
+	public ResponseEntity<Void> delete(@PathVariable UUID uuid) {
+		productService.deleteProduct(uuid);
 		return ResponseEntity.noContent().build();
 	}
 }

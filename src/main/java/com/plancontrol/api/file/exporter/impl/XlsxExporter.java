@@ -39,7 +39,7 @@ public class XlsxExporter implements FileExporter {
 			int rowIndex = 1;
 			for (CategoryDTO categoryDTO : listCategoryDTO) {
 				Row row = sheet.createRow(rowIndex++);
-				row.createCell(0).setCellValue(categoryDTO.getId());
+				row.createCell(0).setCellValue(categoryDTO.getUuid().toString());
 				row.createCell(1).setCellValue(categoryDTO.getName());
 				row.createCell(2).setCellValue(categoryDTO.getDescription());
 				row.createCell(3).setCellValue(FormatDataUtils.formatData(categoryDTO.getCreatedAt()));

@@ -1,6 +1,7 @@
 package com.plancontrol.api.dto;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import com.plancontrol.api.models.Category;
 
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ProductDTO {
-	private Long id;
+	private UUID uuid;
 
 	private String name;
 

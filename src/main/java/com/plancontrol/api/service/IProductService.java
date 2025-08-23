@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface IProductService {
     ProductDTO addProduct(Product product);
@@ -16,9 +17,9 @@ public interface IProductService {
 
     List<ProductDTO> getAll();
 
-    void deleteProduct(Long id);
+    void deleteProduct(UUID uuid);
 
-    ProductDTO findByIdDTO(Long id);
+    ProductDTO findByIdDTO(UUID uuid);
 
     Long contarTodos();
 }
