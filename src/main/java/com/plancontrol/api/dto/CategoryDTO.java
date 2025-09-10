@@ -1,31 +1,38 @@
 package com.plancontrol.api.dto;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.networkshared.api.dtos.UserDTO;
+import com.networkshared.api.dtos.base.BaseDTO;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
-public class CategoryDTO {
-	private UUID uuid;
-
+@SuperBuilder
+public class CategoryDTO extends BaseDTO implements Serializable {
+	
+	@Serial
+	private static final long serialVersionUID = 1L;
 	private String name;
-
+	
 	private String description;
 
-	private LocalDateTime createdAt;
+	private LocalDateTime created;
 
-	private LocalDateTime updatedAt;
-	
-	private UserDTO userCreated;
+	private LocalDateTime updated;
 	
 	private UserDTO userUpdated;
 	
 	private UUID userUpdateId;
+	
+	public CategoryDTO() {
+
+	}
+
 }

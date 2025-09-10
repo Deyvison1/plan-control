@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -14,7 +13,6 @@ public interface IBaseMapper<E, D> {
 
 	E toEntity(D dto);
 
-	@Mapping(target = "uuid", ignore = true)
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 	E toEntity(D dto, @MappingTarget E entity);
 

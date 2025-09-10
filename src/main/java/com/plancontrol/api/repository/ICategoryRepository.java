@@ -15,17 +15,4 @@ public interface ICategoryRepository extends JpaRepository<Category, UUID> {
 	Page<Category> findAll(Pageable page);
 
 	Long countBy();
-
-	@Query(value = """
-			SELECT
-			    c.uuid as category_uuid,
-			    c.name as category_name,
-			    c.description as category_description,
-			    u.nick as user_nick,
-			    u.email as user_email
-			FROM plan_control.categories c
-			LEFT JOIN auth.users u ON c.user_update_id = u.uuid
-			WHERE c.uuid = :uuid
-			""", nativeQuery = true)
-	ICategoryUserProjection findCategoryWithUserInfo(@Param("uuid") UUID uuid);
 }

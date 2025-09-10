@@ -18,6 +18,8 @@ public interface ICategoryService {
     CategoryDTO insert(CategoryDTO categoryDTO);
 
     CategoryDTO update(CategoryDTO categoryDTO);
+    
+    List<CategoryDTO> findAllCategories();
 
     void delete(UUID uuid);
 

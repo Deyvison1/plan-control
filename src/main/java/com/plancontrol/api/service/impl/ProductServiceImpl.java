@@ -2,6 +2,7 @@ package com.plancontrol.api.service.impl;
 
 import com.plancontrol.api.dto.ProductDTO;
 import com.plancontrol.api.exception.NotFoundException;
+import com.plancontrol.api.mapper.ICategoryMapper;
 import com.plancontrol.api.mapper.IProductMapper;
 import com.plancontrol.api.models.Product;
 import com.plancontrol.api.repository.IProductRepository;
@@ -20,17 +21,18 @@ import java.util.UUID;
 public class ProductServiceImpl implements IProductService {
     private final IProductRepository productRepository;
     private final IProductMapper productMapper;
+    private final ICategoryMapper categoryMapper;
 
     @Override
-    public ProductDTO updateProduct(ProductDTO productDTO) {
-        Product product = findById(productDTO.getUuid());
+    public ProductDTO updateProduct(UUID uuid, ProductDTO productDTO) {
+        Product product = findById(uuid);
         Product productAAtualizar = mountProduct(productDTO, product);
         return productMapper.toDto(productRepository.save(productAAtualizar));
     }
 
     private Product mountProduct(ProductDTO productDTO, Product product) {
         product.setUuid(productDTO.getUuid());
-        product.setCategory(productDTO.getCategory());
+        product.setCategory(categoryMapper.toEntity(productDTO.getCategory()));
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setValue(productDTO.getValue());
@@ -60,8 +62,9 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductDTO addProduct(Product product) {
-        return productMapper.toDto(productRepository.save(product));
+    public ProductDTO addProduct(ProductDTO productDTO) {
+    	Product entity = productMapper.toEntity(productDTO);
+        return productMapper.toDto(productRepository.save(entity));
     }
 
     @Override

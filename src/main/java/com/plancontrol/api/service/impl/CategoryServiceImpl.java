@@ -53,6 +53,11 @@ public class CategoryServiceImpl implements ICategoryService {
 	}
 	
 	@Override
+	public List<CategoryDTO> findAllCategories() {
+		return categoryMapper.toDto(categoryRepository.findAll());
+	}
+	
+	@Override
 	public CategoryDTO insert(CategoryDTO categoryDTO) {
 		DecodedJWT tokenDecoded = tokenService.decodedToken();
 		UUID uuidUser = userClientService.findUUIDByNick(tokenDecoded.getSubject());

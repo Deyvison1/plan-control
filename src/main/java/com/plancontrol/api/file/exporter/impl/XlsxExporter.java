@@ -42,8 +42,8 @@ public class XlsxExporter implements FileExporter {
 				row.createCell(0).setCellValue(categoryDTO.getUuid().toString());
 				row.createCell(1).setCellValue(categoryDTO.getName());
 				row.createCell(2).setCellValue(categoryDTO.getDescription());
-				row.createCell(3).setCellValue(FormatDataUtils.formatData(categoryDTO.getCreatedAt()));
-				row.createCell(4).setCellValue(FormatDataUtils.formatData(categoryDTO.getUpdatedAt()));
+				row.createCell(3).setCellValue(FormatDataUtils.formatData(categoryDTO.getCreated()));
+				row.createCell(4).setCellValue(FormatDataUtils.formatData(categoryDTO.getUpdated()));
 			}
 
 			for (int i = 0; i < headers.length; i++) {

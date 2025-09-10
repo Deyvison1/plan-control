@@ -1,19 +1,23 @@
 package com.plancontrol.api.dto;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.UUID;
 
-import com.plancontrol.api.models.Category;
+import com.networkshared.api.dtos.base.BaseDTO;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
-public class ProductDTO {
-	private UUID uuid;
+@SuperBuilder
+public class ProductDTO extends BaseDTO implements Serializable {
+	@Serial
+	private static final long serialVersionUID = 1L;
 
 	private String name;
 
@@ -29,6 +33,10 @@ public class ProductDTO {
 
 	private BigDecimal value;
 
-	private Category category;
+	private CategoryDTO category;
+	
+	public ProductDTO() {
+		
+	}
 
 }

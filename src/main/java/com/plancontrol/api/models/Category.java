@@ -1,9 +1,11 @@
 package com.plancontrol.api.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -18,7 +20,9 @@ import java.util.UUID;
 @Table(name = "categories", schema = "plan_control")
 @Getter
 @Setter
-@RequiredArgsConstructor
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category extends IdBase implements Serializable {
 
     @Serial
@@ -28,11 +32,11 @@ public class Category extends IdBase implements Serializable {
 
     private String description;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created", nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createdAt;
-    @Column(name = "updated_at", nullable = true, updatable = true)
-    private LocalDateTime updatedAt;
+    private LocalDateTime created;
+    @Column(name = "updated", nullable = true, updatable = true)
+    private LocalDateTime updated;
     
     @Column(name = "user_update_id")
     private UUID userUpdateId;

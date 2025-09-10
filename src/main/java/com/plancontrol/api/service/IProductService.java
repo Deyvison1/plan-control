@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IProductService {
-    ProductDTO addProduct(Product product);
+    ProductDTO addProduct(ProductDTO product);
 
-    ProductDTO updateProduct(ProductDTO Product);
+    ProductDTO updateProduct(UUID uuid, ProductDTO Product);
 
     Page<Product> getAll(Pageable page);
 

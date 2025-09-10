@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,13 +29,9 @@ public class ProductController {
 	private final IProductService productService;
 
 	@GetMapping
-	public ResponseEntity<List<Product>> getAll(Pageable pageable) {
+	public ResponseEntity<Page<Product>> getAll(Pageable pageable) {
 		Page<Product> listProduct = productService.getAll(pageable);
-		final Long total = productService.contarTodos();
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("X_TOTAL_COUNT", String.valueOf(total));
-		return new ResponseEntity<List<Product>>(listProduct.getContent(), headers, HttpStatus.OK);
+		return ResponseEntity.ok(listProduct);
 	}
 
 	@GetMapping("/get-all")
@@ -46,18 +40,23 @@ public class ProductController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ProductDTO> add(@RequestBody Product product) {
-		return ResponseEntity.ok(productService.addProduct(product));
+	public ResponseEntity<ProductDTO> add(@RequestBody ProductDTO productDTO) {
+		return ResponseEntity.ok(productService.addProduct(productDTO));
 	}
 
-	@PutMapping
-	public ResponseEntity<ProductDTO> update(@RequestBody ProductDTO productDTO) {
-		return ResponseEntity.ok(productService.updateProduct(productDTO));
+	@PutMapping("/{uuid}")
+	public ResponseEntity<ProductDTO> update(@PathVariable UUID uuid, @RequestBody ProductDTO productDTO) {
+		return ResponseEntity.ok(productService.updateProduct(uuid, productDTO));
 	}
 
-	@DeleteMapping("{id}")
+	@DeleteMapping("/{uuid}")
 	public ResponseEntity<Void> delete(@PathVariable UUID uuid) {
 		productService.deleteProduct(uuid);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/{uuid}")
+	public ResponseEntity<ProductDTO> getById(@PathVariable UUID uuid) {
+		return ResponseEntity.ok(productService.findByIdDTO(uuid));
 	}
 }

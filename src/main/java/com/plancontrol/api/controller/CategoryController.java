@@ -7,7 +7,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,18 +35,14 @@ public class CategoryController {
 	private final ICategoryService categoryService;
 
 	@GetMapping
-	public ResponseEntity<List<Category>> getAll(Pageable pageable) {
+	public ResponseEntity<Page<Category>> getAll(Pageable pageable) {
 		Page<Category> listCategory = categoryService.getAll(pageable);
-		final Long total = categoryService.contarTodos();
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("X_TOTAL_COUNT", String.valueOf(total));
-		return new ResponseEntity<List<Category>>(listCategory.getContent(), headers, HttpStatus.OK);
+		return ResponseEntity.ok(listCategory);
 	}
-
+	
 	@GetMapping("/get-all")
-	public List<CategoryDTO> getAll() {
-		return categoryService.getAll();
+	public ResponseEntity<List<CategoryDTO>> findAllCategories() {
+		return ResponseEntity.ok(categoryService.findAllCategories());
 	}
 	
 	@GetMapping("/{uuid}")

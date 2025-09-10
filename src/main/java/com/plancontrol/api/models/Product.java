@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.plancontrol.api.models.base.IdBase;
@@ -14,15 +13,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "products", schema = "plan_control")
 @Getter
 @Setter
-@RequiredArgsConstructor
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product extends IdBase implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -44,10 +47,10 @@ public class Product extends IdBase implements Serializable {
 	@ManyToOne
 	private Category category;
 
-	@Column(name = "created_at", nullable = false, updatable = false)
+	@Column(name = "created", nullable = false, updatable = false)
 	@CreationTimestamp
-	private LocalDateTime createdAt;
-	@Column(name = "updated_at", nullable = true, updatable = true)
-	private LocalDateTime updatedAt;
+	private LocalDateTime created;
+	@Column(name = "updated", nullable = true, updatable = true)
+	private LocalDateTime updated;
 	
 }
