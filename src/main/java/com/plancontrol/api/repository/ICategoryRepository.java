@@ -5,13 +5,11 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import com.networkshared.api.dtos.ICategoryUserProjection;
 import com.plancontrol.api.models.Category;
 
-public interface ICategoryRepository extends JpaRepository<Category, UUID> {
+public interface ICategoryRepository extends JpaRepository<Category, UUID>, JpaSpecificationExecutor<Category> {
 	Page<Category> findAll(Pageable page);
 
 	Long countBy();

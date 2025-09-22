@@ -3,13 +3,9 @@ package com.plancontrol.api.models;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import com.plancontrol.api.models.base.IdBase;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -46,11 +42,5 @@ public class Product extends IdBase implements Serializable {
 
 	@ManyToOne
 	private Category category;
-
-	@Column(name = "created", nullable = false, updatable = false)
-	@CreationTimestamp
-	private LocalDateTime created;
-	@Column(name = "updated", nullable = true, updatable = true)
-	private LocalDateTime updated;
 	
 }

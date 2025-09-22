@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.plancontrol.api.dto.ProductDTO;
-import com.plancontrol.api.models.Product;
+import com.plancontrol.api.dto.ProductFilterDTO;
 import com.plancontrol.api.service.IProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,8 @@ public class ProductController {
 	private final IProductService productService;
 
 	@GetMapping
-	public ResponseEntity<Page<Product>> getAll(Pageable pageable) {
-		Page<Product> listProduct = productService.getAll(pageable);
+	public ResponseEntity<Page<ProductDTO>> getAll(@ModelAttribute ProductFilterDTO filter, Pageable pageable) {
+		Page<ProductDTO> listProduct = productService.getAll(filter, pageable);
 		return ResponseEntity.ok(listProduct);
 	}
 

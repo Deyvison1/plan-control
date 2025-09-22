@@ -1,7 +1,7 @@
 package com.plancontrol.api.service;
 
 import com.plancontrol.api.dto.ProductDTO;
-import com.plancontrol.api.models.Product;
+import com.plancontrol.api.dto.ProductFilterDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,7 +13,7 @@ public interface IProductService {
 
     ProductDTO updateProduct(UUID uuid, ProductDTO Product);
 
-    Page<Product> getAll(Pageable page);
+    Page<ProductDTO> getAll(ProductFilterDTO filter, Pageable page);
 
     List<ProductDTO> getAll();
 

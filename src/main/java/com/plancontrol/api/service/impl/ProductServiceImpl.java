@@ -1,15 +1,23 @@
 package com.plancontrol.api.service.impl;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.plancontrol.api.dto.ProductDTO;
+import com.plancontrol.api.dto.ProductFilterDTO;
 import com.plancontrol.api.exception.NotFoundException;
 import com.plancontrol.api.mapper.ICategoryMapper;
 import com.plancontrol.api.mapper.IProductMapper;
 import com.plancontrol.api.models.Product;
 import com.plancontrol.api.repository.IProductRepository;
+import com.plancontrol.api.repository.ProductSpecification;
 import com.plancontrol.api.service.IProductService;
+import com.plancontrol.api.service.ITokenService;
+import com.plancontrol.api.service.client.IUserClientService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +30,8 @@ public class ProductServiceImpl implements IProductService {
     private final IProductRepository productRepository;
     private final IProductMapper productMapper;
     private final ICategoryMapper categoryMapper;
+	private final IUserClientService userClientService;
+	private final ITokenService tokenService;
 
     @Override
     public ProductDTO updateProduct(UUID uuid, ProductDTO productDTO) {
@@ -31,6 +41,9 @@ public class ProductServiceImpl implements IProductService {
     }
 
     private Product mountProduct(ProductDTO productDTO, Product product) {
+    	DecodedJWT tokenDecoded = tokenService.decodedToken();
+		UUID uuidUser = userClientService.findUUIDByNick(tokenDecoded.getSubject());
+		product.setUserUpdateId(uuidUser);
         product.setUuid(productDTO.getUuid());
         product.setCategory(categoryMapper.toEntity(productDTO.getCategory()));
         product.setName(productDTO.getName());
@@ -68,8 +81,11 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Page<Product> getAll(Pageable page) {
-        return productRepository.findAll(page);
+    public Page<ProductDTO> getAll(ProductFilterDTO filter, Pageable page) {
+    	Specification<Product> spec = ProductSpecification.filterBy(filter);
+	    Page<Product> entities = productRepository.findAll(spec, page);
+		List<ProductDTO> dtos = productMapper.toDto(entities.getContent());
+		return new PageImpl<>(dtos, page, entities.getTotalElements());
     }
 
     @Override

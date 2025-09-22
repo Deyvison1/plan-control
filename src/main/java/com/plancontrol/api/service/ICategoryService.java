@@ -1,7 +1,7 @@
 package com.plancontrol.api.service;
 
 import com.plancontrol.api.dto.CategoryDTO;
-import com.plancontrol.api.models.Category;
+import com.plancontrol.api.dto.CategoryFilterDTO;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ICategoryService {
-    Page<Category> getAll(Pageable pageable);
+    Page<CategoryDTO> getAll(CategoryFilterDTO filter, Pageable pageable);
 
     List<CategoryDTO> getAll();
 

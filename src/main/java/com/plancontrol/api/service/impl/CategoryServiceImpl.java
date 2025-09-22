@@ -3,6 +3,7 @@ package com.plancontrol.api.service.impl;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.networkshared.api.dtos.UserDTO;
 import com.plancontrol.api.dto.CategoryDTO;
+import com.plancontrol.api.dto.CategoryFilterDTO;
 import com.plancontrol.api.exception.NotFoundException;
 import com.plancontrol.api.exception.UnsupportedFileException;
 import com.plancontrol.api.file.exporter.contract.FileExporter;
@@ -11,6 +12,7 @@ import com.plancontrol.api.file.imported.contract.FileImported;
 import com.plancontrol.api.file.imported.factory.FileImportedFactory;
 import com.plancontrol.api.mapper.ICategoryMapper;
 import com.plancontrol.api.models.Category;
+import com.plancontrol.api.repository.CategorySpecification;
 import com.plancontrol.api.repository.ICategoryRepository;
 import com.plancontrol.api.service.ICategoryService;
 import com.plancontrol.api.service.ITokenService;
@@ -20,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,8 +44,11 @@ public class CategoryServiceImpl implements ICategoryService {
 	private final ITokenService tokenService;
 
 	@Override
-	public Page<Category> getAll(Pageable page) {
-		return categoryRepository.findAll(page);
+	public Page<CategoryDTO> getAll(CategoryFilterDTO filter, Pageable page) {
+		Specification<Category> spec = CategorySpecification.filterBy(filter);
+	    Page<Category> entities = categoryRepository.findAll(spec, page);
+		List<CategoryDTO> dtos = categoryMapper.toDto(entities.getContent());
+		return new PageImpl<>(dtos, page, entities.getTotalElements());
 	}
 	
 	@Override
@@ -59,10 +66,6 @@ public class CategoryServiceImpl implements ICategoryService {
 	
 	@Override
 	public CategoryDTO insert(CategoryDTO categoryDTO) {
-		DecodedJWT tokenDecoded = tokenService.decodedToken();
-		UUID uuidUser = userClientService.findUUIDByNick(tokenDecoded.getSubject());
-		
-		categoryDTO.setUserUpdateId(uuidUser);
 		Category entity = categoryMapper.toEntity(categoryDTO);
 		return categoryMapper.toDto(categoryRepository.save(entity));
 	}
@@ -83,9 +86,13 @@ public class CategoryServiceImpl implements ICategoryService {
 	}
 
 	private Category montarCategory(CategoryDTO categoryDTO, Category category) {
+		DecodedJWT tokenDecoded = tokenService.decodedToken();
+		UUID uuidUser = userClientService.findUUIDByNick(tokenDecoded.getSubject());
+
 		category.setUuid(categoryDTO.getUuid());
 		category.setName(categoryDTO.getName());
 		category.setDescription(categoryDTO.getDescription());
+		category.setUserUpdateId(uuidUser);
 		return category;
 	}
 

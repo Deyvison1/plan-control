@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.plancontrol.api.dto.CategoryDTO;
+import com.plancontrol.api.dto.CategoryFilterDTO;
 import com.plancontrol.api.file.exporter.MediaTypes;
-import com.plancontrol.api.models.Category;
 import com.plancontrol.api.service.ICategoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,8 +36,8 @@ public class CategoryController {
 	private final ICategoryService categoryService;
 
 	@GetMapping
-	public ResponseEntity<Page<Category>> getAll(Pageable pageable) {
-		Page<Category> listCategory = categoryService.getAll(pageable);
+	public ResponseEntity<Page<CategoryDTO>> getAll(@ModelAttribute CategoryFilterDTO filter, Pageable pageable) {
+		Page<CategoryDTO> listCategory = categoryService.getAll(filter, pageable);
 		return ResponseEntity.ok(listCategory);
 	}
 	
